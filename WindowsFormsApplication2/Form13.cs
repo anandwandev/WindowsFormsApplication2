@@ -26,7 +26,7 @@ namespace WindowsFormsApplication2
             if (radioButton1.Checked == true)
             {
                 bool isOpen = false;
-                Form14 form14 = new Form14();
+                EditDatabase form14 = new EditDatabase();
                 if (Application.OpenForms["Form14"] != null)
                 {
                     if ((Application.OpenForms["Form14"].Text).Equals("MSS Information Centre"))
@@ -54,7 +54,7 @@ namespace WindowsFormsApplication2
             else if (radioButton4.Checked==true)
             {
                 bool isOpen = false;
-                Form15 form15 = new Form15();
+                DeleteDBRecords form15 = new DeleteDBRecords();
                 if (Application.OpenForms["Form15"] != null)
                 {
                     if ((Application.OpenForms["Form15"].Text).Equals("MSS Information Centre"))
@@ -84,7 +84,7 @@ namespace WindowsFormsApplication2
         private void button7_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form4 form4 = new Form4();
+            AdminHome form4 = new AdminHome();
             if (Application.OpenForms["Form4"] != null)
             {
                 if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))

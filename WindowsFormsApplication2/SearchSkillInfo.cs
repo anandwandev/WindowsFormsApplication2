@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form12 : Form
+    public partial class SearchSkillInfo : Form
     {
         private string connect;
         private MySqlConnection conn;
         private MySqlDataAdapter mySqlDataAdapter;
         int countreader = 0;
         String whereclause;
-        public Form12()
+        public SearchSkillInfo()
         {
             InitializeComponent();
             this.comboBox1.DisplayMember = "Text";
@@ -30,7 +30,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -89,7 +89,7 @@ namespace WindowsFormsApplication2
                 if (comboBox1.Text == "Aadhar ID")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where aadharid='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where Aadharid=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -102,7 +102,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Educational Degree")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where degree='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where HighestQualification like '%" + @whereclause + "%'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -115,7 +115,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Other Qualification")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where profdegree='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where ProfessionalCourses like '%" + @whereclause + "%'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -128,7 +128,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Work Experience")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where workexp='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where MSSWorkExperience=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -141,7 +141,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Department")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where department='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where Department='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -154,7 +154,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Work Type")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where typeofwork='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where TypeOfWork='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -167,7 +167,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Salary")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where salary='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where Salary=" + @whereclause, conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -179,7 +179,7 @@ namespace WindowsFormsApplication2
                 }
                 else if (comboBox1.Text == "All")
                 {
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',profdegree as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];

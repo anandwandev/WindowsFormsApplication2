@@ -5,12 +5,13 @@ using System.IO;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form7 : Form
+    public partial class EducationalDetails : Form
     {
         private string connect;
         private MySqlConnection conn;
         int submitClickCount = 0;
-        String personalaadharid,degree,course,workexp,department,worktype,salary;
+        String degree,course,department,worktype;
+        int personalaadharid, workexp, salary;
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -25,7 +26,7 @@ namespace WindowsFormsApplication2
         private void button4_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form6 form6 = new Form6(textBox1.Text);
+            HealthcareDetails form6 = new HealthcareDetails(textBox1.Text);
             if (Application.OpenForms["Form6"] != null)
             {
                 if ((Application.OpenForms["Form6"].Text).Equals("MSS Information Centre"))
@@ -58,7 +59,7 @@ namespace WindowsFormsApplication2
 
         }
 
-        public Form7(String qs)
+        public EducationalDetails(String qs)
         {
             InitializeComponent();
             textBox1.Text = qs;
@@ -192,7 +193,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -227,36 +228,36 @@ namespace WindowsFormsApplication2
                 ConnectDB();
                 MySqlCommand cmdQuery = new MySqlCommand();
                 int count = 0;
-                personalaadharid = textBox1.Text;
+                personalaadharid = Convert.ToInt32(textBox1.Text);
                 string foldername = @"C:\Users\Admin\Documents\" + personalaadharid;
                 string[] FilenameName;
                 degree = comboBox1.Text;
                 course = textBox2.Text;
-                workexp = comboBox5.Text + "yr " + comboBox6.Text + "mth";
+                workexp = Convert.ToInt32(comboBox5.Text)*12 + Convert.ToInt32(comboBox6.Text);
                 department = comboBox2.Text;
                 worktype = textBox3.Text;
-                salary = textBox4.Text;
+                salary = Convert.ToInt32(textBox4.Text);
                 if (submitClickCount == 0)
                 {
                     submitClickCount = 1;
-                    cmdQuery.CommandText = "INSERT INTO qualifications(aadharid,degree,qualification,workexp,department,typeofwork,salary)" + "VALUES('" + personalaadharid + "','" + degree + "','" + course + "','" + workexp + "','" + department + "','" + worktype + "','" + salary + "')";
+                    cmdQuery.CommandText = "INSERT INTO Qualification(Aadharid,HighestQualification,ProfessionalCourses,MSSWorkExperience,Department,TypeOfWork,Salary)" + "VALUES(" + personalaadharid + ",'" + degree + "','" + course + "'," + workexp + ",'" + department + "','" + worktype + "'," + salary + ")";
                     cmdQuery.Connection = conn;
                     cmdQuery.ExecuteNonQuery();
                     MessageBox.Show("Records saved successfully!");
                 }
-                foreach (string item in openFileDialog1.FileNames)
-                {
-                    //FilenameName = item.Split('\\');
-                    //if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
-                    //{
-                    //    MessageBox.Show("File Already Exists!");
-                    //}
-                    //else
-                    //{
-                    //    File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
-                    //    count++;
-                    //}
-                }
+            //    foreach (string item in openFileDialog1.FileNames)
+            //    {
+            //    FilenameName = item.Split('\\');
+            //    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
+            //    {
+            //        MessageBox.Show("File Already Exists!");
+            //    }
+            //    else
+            //    {
+            //        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
+            //        count++;
+            //    }
+            //}
         }
     }
 }

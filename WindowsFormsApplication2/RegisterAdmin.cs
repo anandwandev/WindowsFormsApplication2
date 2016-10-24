@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form2 : Form
+    public partial class RegisterAdmin : Form
     {
         String fname, lname, uname, pass, pass1,phone;
         private string connect;
@@ -23,7 +23,7 @@ namespace WindowsFormsApplication2
         private void button3_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form1 form1 = new Form1();
+            LoginForm form1 = new LoginForm();
             if (Application.OpenForms["Form1"] != null)
             {
                 if ((Application.OpenForms["Form1"].Text).Equals("MSS Information Centre"))
@@ -50,7 +50,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -78,15 +78,15 @@ namespace WindowsFormsApplication2
                 {
                     MessageBox.Show("Passwords do not match.Please Re-Enter!");
                 }
-                else if (!(phone.Equals("6666666666")))
-                {
-                    MessageBox.Show("Unauthorised User!");
-                }
+                //else if (!(phone.Equals("6666666666")))
+                //{
+                //    MessageBox.Show("Unauthorised User!");
+                //}
                 else
                 {
                     ConnectDB();
                     MySqlCommand cmdQuery = new MySqlCommand();
-                    cmdQuery.CommandText = "INSERT INTO anandwanregistration(fname,lname,phone,uname,pass,pass1)" + "VALUES('" + fname + "','" + lname + "','" + phone + "','" + uname + "','" + pass + "','" + pass1 + "')";
+                    cmdQuery.CommandText = "INSERT INTO Admin(FirstName,LastName,PhoneNumber,Username,Password)" + "VALUES('" + fname + "','" + lname + "','" + phone + "','" + uname + "','" + pass + "')";
                     cmdQuery.Connection = conn;
                     cmdQuery.ExecuteNonQuery();
                     submitClickCount = 1;
@@ -97,7 +97,7 @@ namespace WindowsFormsApplication2
                 }
             }
         }
-        public Form2()
+        public RegisterAdmin()
         {
             InitializeComponent();
         }

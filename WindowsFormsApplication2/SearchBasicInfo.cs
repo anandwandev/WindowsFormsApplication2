@@ -5,13 +5,13 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form9 : Form
+    public partial class SearchBasicInfo : Form
     {
         private string connect;
         private MySqlConnection conn;
         private MySqlDataAdapter mySqlDataAdapter;
         String whereclause;
-        public Form9()
+        public SearchBasicInfo()
         {
             InitializeComponent();
             this.comboBox1.DisplayMember = "Text";
@@ -56,7 +56,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -86,7 +86,7 @@ namespace WindowsFormsApplication2
                 if (comboBox1.Text == "Aadharid")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where aadharid='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where Aadharid=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -99,7 +99,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Age")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where age='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where ROUND(DATEDIFF(DateOfBirth,CURDATE())/365)=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -112,7 +112,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Blood Group")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where bloodgp='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where BloodGroup='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -125,7 +125,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Gender")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where gender='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where Gender='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -138,7 +138,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Religion")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where religion='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where Religion='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -151,7 +151,7 @@ namespace WindowsFormsApplication2
                 else if (comboBox1.Text == "Caste")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where caste='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where Caste='" + @whereclause + "'", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -163,7 +163,7 @@ namespace WindowsFormsApplication2
                 }
                 else if(comboBox1.Text=="All")
                 {
-                    mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -174,8 +174,10 @@ namespace WindowsFormsApplication2
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception msg)
             {
+                MessageBox.Show(msg.ToString());
+                throw;
             }
         }
     }

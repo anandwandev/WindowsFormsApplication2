@@ -4,13 +4,14 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace WindowsFormsApplication2
 {
-    public partial class Form6 : Form
+    public partial class HealthcareDetails : Form
     {
-        String personalaadharid, disability, percentage, medcondition, othercondition;
+        String disability, medcondition, othercondition;
+        int personalaadharid, percentage;
         private string connect;
         private MySqlConnection conn;
         int submitClickCount = 0;
-        public Form6(String qs)
+        public HealthcareDetails(String qs)
         {
             InitializeComponent();
             textBox1.Text = qs;
@@ -23,25 +24,25 @@ namespace WindowsFormsApplication2
             this.comboBox2.DisplayMember = "Text";
             this.comboBox2.ValueMember = "Value";
             comboBox2.Items.Add(new { Text = "NA", Value = "NA" });
-            comboBox2.Items.Add(new { Text = "10%", Value = "10%" });
-            comboBox2.Items.Add(new { Text = "15%", Value = "15%" });
-            comboBox2.Items.Add(new { Text = "20%", Value = "20%" });
-            comboBox2.Items.Add(new { Text = "25%", Value = "25%" });
-            comboBox2.Items.Add(new { Text = "30%", Value = "30%" });
-            comboBox2.Items.Add(new { Text = "35%", Value = "35%" });
-            comboBox2.Items.Add(new { Text = "40%", Value = "40%" });
-            comboBox2.Items.Add(new { Text = "45%", Value = "45%" });
-            comboBox2.Items.Add(new { Text = "50%", Value = "50%" });
-            comboBox2.Items.Add(new { Text = "55%", Value = "55%" });
-            comboBox2.Items.Add(new { Text = "60%", Value = "60%" });
-            comboBox2.Items.Add(new { Text = "65%", Value = "65%" });
-            comboBox2.Items.Add(new { Text = "70%", Value = "70%" });
-            comboBox2.Items.Add(new { Text = "75%", Value = "75%" });
-            comboBox2.Items.Add(new { Text = "80%", Value = "80%" });
-            comboBox2.Items.Add(new { Text = "85%", Value = "85%" });
-            comboBox2.Items.Add(new { Text = "90%", Value = "90%" });
-            comboBox2.Items.Add(new { Text = "95%", Value = "95%" });
-            comboBox2.Items.Add(new { Text = "100%", Value = "100%" });
+            comboBox2.Items.Add(new { Text = "10%", Value = "10" });
+            comboBox2.Items.Add(new { Text = "15%", Value = "15" });
+            comboBox2.Items.Add(new { Text = "20%", Value = "20" });
+            comboBox2.Items.Add(new { Text = "25%", Value = "25" });
+            comboBox2.Items.Add(new { Text = "30%", Value = "30" });
+            comboBox2.Items.Add(new { Text = "35%", Value = "35" });
+            comboBox2.Items.Add(new { Text = "40%", Value = "40" });
+            comboBox2.Items.Add(new { Text = "45%", Value = "45" });
+            comboBox2.Items.Add(new { Text = "50%", Value = "50" });
+            comboBox2.Items.Add(new { Text = "55%", Value = "55" });
+            comboBox2.Items.Add(new { Text = "60%", Value = "60" });
+            comboBox2.Items.Add(new { Text = "65%", Value = "65" });
+            comboBox2.Items.Add(new { Text = "70%", Value = "70" });
+            comboBox2.Items.Add(new { Text = "75%", Value = "75" });
+            comboBox2.Items.Add(new { Text = "80%", Value = "80" });
+            comboBox2.Items.Add(new { Text = "85%", Value = "85" });
+            comboBox2.Items.Add(new { Text = "90%", Value = "90" });
+            comboBox2.Items.Add(new { Text = "95%", Value = "95" });
+            comboBox2.Items.Add(new { Text = "100%", Value = "100" });
             this.comboBox3.DisplayMember = "Text";
             this.comboBox3.ValueMember = "Value";
             comboBox3.Items.Add(new { Text = "NA", Value = "NA" });
@@ -66,7 +67,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -98,31 +99,32 @@ namespace WindowsFormsApplication2
                 ConnectDB();
                 MySqlCommand cmdQuery = new MySqlCommand();
                 int count = 0;
-                personalaadharid = textBox1.Text;
-                string foldername = @"C:\Users\Admin\Documents\" + personalaadharid;
+                personalaadharid = Convert.ToInt32(textBox1.Text);
+                //string foldername = @"C:\Users\Admin\Documents\" + personalaadharid;
                 string[] FilenameName;
 
-                foreach (string item in openFileDialog1.FileNames)
-                {
-                    FilenameName = item.Split('\\');
-                    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
-                    {
-                        MessageBox.Show("File Already Exists!");
-                    }
-                    else
-                    {
-                        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
-                        count++;
-                    }
-                }
+                //foreach (string item in openFileDialog1.FileNames)
+                //{
+                //    FilenameName = item.Split('\\');
+                //    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
+                //    {
+                //        MessageBox.Show("File Already Exists!");
+                //    }
+                //    else
+                //    {
+                //        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
+                //        count++;
+                //    }
+                //}
                 disability = comboBox1.Text;
-                percentage = comboBox2.Text;
+                //TODO: 0 value is inserted
+                percentage = Convert.ToInt32(comboBox2.SelectedValue);
                 medcondition = comboBox3.Text;
                 othercondition = textBox3.Text;
                 if (submitClickCount == 0)
                 {
                     submitClickCount = 1;
-                    cmdQuery.CommandText = "INSERT INTO health(aadharid,disabilitytype,percent,medicalCondition,otherCondition)" + "VALUES('" + personalaadharid + "','" + disability + "','" + percentage + "','" + medcondition + "','" + othercondition + "')";
+                    cmdQuery.CommandText = "INSERT INTO PersonHealthDetails(Aadharid,OtherDisabilityType,DisabilityPercentage,MedicalConditions)" + "VALUES(" + personalaadharid + ",'" + disability + "'," + percentage + ",'" + medcondition + "," + othercondition + "')";
                     cmdQuery.Connection = conn;
                     cmdQuery.ExecuteNonQuery();
                     MessageBox.Show("Records saved successfully!");
@@ -137,7 +139,7 @@ namespace WindowsFormsApplication2
         private void button4_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form5 form5 = new Form5(textBox1.Text);
+            FamilyDetails form5 = new FamilyDetails(textBox1.Text);
             if (Application.OpenForms["Form5"] != null)
             {
                 if ((Application.OpenForms["Form5"].Text).Equals("MSS Information Centre"))
@@ -174,7 +176,7 @@ namespace WindowsFormsApplication2
         private void button5_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form7 form7 = new Form7(textBox1.Text);
+            EducationalDetails form7 = new EducationalDetails(textBox1.Text);
             if (Application.OpenForms["Form7"] != null)
             {
                 if ((Application.OpenForms["Form7"].Text).Equals("MSS Information Centre"))

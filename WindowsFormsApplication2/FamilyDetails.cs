@@ -3,13 +3,14 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace WindowsFormsApplication2
 {
-    public partial class Form5 : Form
+    public partial class FamilyDetails : Form
     {
         private string connect;
         private MySqlConnection conn;
-        String personalaadharid, familyaadharid,relation,dependents,totalmembers;
-        int submitClickCount =0,headFlag=0,depFlag=0;
-        public Form5(String qs)
+        String relation,dependents,totalmembers;
+        int personalaadharid, familyHeadAadharId, isFinanciallyDependent;
+        int submitClickCount =0,headFlag=0;
+        public FamilyDetails(String qs)
         {
             InitializeComponent();
             textBox1.Text = qs;
@@ -57,7 +58,7 @@ namespace WindowsFormsApplication2
         private void button4_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form3 form3 = new Form3();
+            BasicInformation form3 = new BasicInformation();
             if (Application.OpenForms["Form3"] != null)
             {
                 if ((Application.OpenForms["Form3"].Text).Equals("MSS Information Centre"))
@@ -86,7 +87,7 @@ namespace WindowsFormsApplication2
         private void button3_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form6 form6 = new Form6(textBox1.Text);
+            HealthcareDetails form6 = new HealthcareDetails(textBox1.Text);
             if (Application.OpenForms["Form6"] != null)
             {
                 if ((Application.OpenForms["Form6"].Text).Equals("MSS Information Centre"))
@@ -145,7 +146,7 @@ namespace WindowsFormsApplication2
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton1.Checked==true)
+            if (rdbFamilyHeadYes.Checked==true)
             {
                 comboBox1.Enabled = true;
                 comboBox4.Enabled = false;
@@ -156,7 +157,7 @@ namespace WindowsFormsApplication2
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton2.Checked == true)
+            if (rdbFamilyHeadNo.Checked == true)
             {
                 comboBox1.Enabled = false;
                 comboBox4.Enabled = true;
@@ -168,7 +169,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -188,15 +189,16 @@ namespace WindowsFormsApplication2
                     submitClickCount = 1;
                     ConnectDB();
                     MySqlCommand cmdQuery = new MySqlCommand();
-                    if (radioButton1.Checked == true)
+                    if (rdbFamilyHeadYes.Checked == true)
                     {
                         headFlag = 1;
-                        personalaadharid = textBox1.Text;
+                        personalaadharid = Convert.ToInt32(textBox1.Text);
+                        familyHeadAadharId = personalaadharid;
                         dependents = comboBox1.Text;
                         totalmembers = comboBox5.Text;
                         relation = "Self";
-                        depFlag = 0;
-                        cmdQuery.CommandText = "INSERT INTO family(aadharid,isHead,aadharidFamily,isDepend,relation,noofdep,totalmembers)" + "VALUES('" + personalaadharid + "','" + headFlag + "','" + personalaadharid + "','" + depFlag + "','" + relation + "','" + dependents + "','" + totalmembers + "')";
+                        isFinanciallyDependent = 0;//"False";
+                        cmdQuery.CommandText = "INSERT INTO FamilyDetails(Aadharid,FamilyHeadId,IsFinanciallyDependent)" + "VALUES(" + personalaadharid + "," + familyHeadAadharId + "," + isFinanciallyDependent + ")";
                         cmdQuery.Connection = conn;
                         cmdQuery.ExecuteNonQuery();
                         MessageBox.Show("Records saved successfully!");
@@ -206,16 +208,16 @@ namespace WindowsFormsApplication2
                         headFlag = 0;
                         if (comboBox2.Text == "Yes")
                         {
-                            depFlag = 1;
+                            isFinanciallyDependent = 1;// "True";
                         }
                         else
                         {
-                            depFlag = 0;
+                            isFinanciallyDependent = 0;// "False";
                         }
-                        personalaadharid = textBox1.Text;
-                        familyaadharid = textBox2.Text;
+                        personalaadharid = Convert.ToInt32(textBox1.Text);
+                        familyHeadAadharId = Convert.ToInt32(textBox2.Text);
                         relation = comboBox4.Text;
-                        cmdQuery.CommandText = "INSERT INTO family(aadharid,isHead,aadharidFamily,isDepend,relation,noofdep,totalmembers)" + "VALUES('" + personalaadharid + "','" + headFlag + "','" + familyaadharid + "','" + depFlag + "','" + relation + "','" + dependents + "','" + totalmembers + "')";
+                        cmdQuery.CommandText = "INSERT INTO FamilyDetails(Aadharid,FamilyHeadId,IsFinanciallyDependent,RelationToFamilyHead)" + "VALUES(" + personalaadharid + "," + familyHeadAadharId + "," + isFinanciallyDependent + ",'" + relation +"')";
                         cmdQuery.Connection = conn;
                         cmdQuery.ExecuteNonQuery();
                         MessageBox.Show("Records saved successfully!");
@@ -225,14 +227,15 @@ namespace WindowsFormsApplication2
             }
             catch (Exception)
             {
+                throw;
             }
         }
         private void button2_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
             textBox2.Text = "";
-            radioButton1.Checked = false;
-            radioButton2.Checked = false;
+            rdbFamilyHeadYes.Checked = false;
+            rdbFamilyHeadNo.Checked = false;
             
             comboBox1.Text = "";
             comboBox4.Text = "";

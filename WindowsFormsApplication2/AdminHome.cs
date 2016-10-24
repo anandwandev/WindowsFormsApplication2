@@ -3,12 +3,12 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form4 : Form
+    public partial class AdminHome : Form
     {
-        public Form4()
+        public AdminHome()
         {
             InitializeComponent();
-            Form1 form1 = new Form1();
+            LoginForm form1 = new LoginForm();
             form1.Hide();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -16,7 +16,7 @@ namespace WindowsFormsApplication2
             if (radioButton1.Checked)
             {
                 bool isOpen = false;
-                Form3 form3 = new Form3();
+                BasicInformation form3 = new BasicInformation();
                 if (Application.OpenForms["Form3"] != null)
                 {
                     if ((Application.OpenForms["Form3"].Text).Equals("MSS Information Centre"))
@@ -103,20 +103,20 @@ namespace WindowsFormsApplication2
             }
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void button7_Click(object sender, EventArgs e)
         {
-            for(int i=Application.OpenForms.Count-1;i>=0;i--)
+
+        }
+
+        private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
                 if (Application.OpenForms[i].Name != "Form1")
                 {
                     Application.OpenForms[i].Close();
                 }
             }
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

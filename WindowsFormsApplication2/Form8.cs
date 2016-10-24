@@ -13,7 +13,7 @@ namespace WindowsFormsApplication2
         private void button7_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form4 form4 = new Form4();
+            AdminHome form4 = new AdminHome();
             if (Application.OpenForms["Form4"] != null)
             {
                 if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))
@@ -55,7 +55,7 @@ namespace WindowsFormsApplication2
             if (radioButton1.Checked == true)
             {
                 bool isOpen = false;
-                Form9 form9 = new Form9();
+                SearchBasicInfo form9 = new SearchBasicInfo();
                 if (Application.OpenForms["Form9"] != null)
                 {
                     if ((Application.OpenForms["Form9"].Text).Equals("MSS Information Centre"))
@@ -83,7 +83,7 @@ namespace WindowsFormsApplication2
             else if (radioButton2.Checked == true)
             {
                 bool isOpen = false;
-                Form10 form10 = new Form10();
+                SearchFamilyInfo form10 = new SearchFamilyInfo();
                 if (Application.OpenForms["Form10"] != null)
                 {
                     if ((Application.OpenForms["Form10"].Text).Equals("MSS Information Centre"))
@@ -111,7 +111,7 @@ namespace WindowsFormsApplication2
             else if (radioButton3.Checked == true)
             {
                 bool isOpen = false;
-                Form11 form11 = new Form11();
+                SearchHealthInfo form11 = new SearchHealthInfo();
                 if (Application.OpenForms["Form11"] != null)
                 {
                     if ((Application.OpenForms["Form11"].Text).Equals("MSS Information Centre"))
@@ -139,7 +139,7 @@ namespace WindowsFormsApplication2
             else if (radioButton4.Checked == true)
             {
                 bool isOpen = false;
-                Form12 form12 = new Form12();
+                SearchSkillInfo form12 = new SearchSkillInfo();
                 if (Application.OpenForms["Form12"] != null)
                 {
                     if ((Application.OpenForms["Form12"].Text).Equals("MSS Information Centre"))

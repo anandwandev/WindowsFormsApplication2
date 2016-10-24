@@ -5,9 +5,10 @@ using System.IO;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form3 : Form
+    public partial class BasicInformation : Form
     {
-        String fname, mname, lname, aadharid, day, mon, year, gender, religion, caste,bdate,date,bloodgp;
+        String fname, mname, lname, day, mon, year, gender, religion, caste,bdate,date,bloodgp;
+        int aadharid; 
         bool isOpen = false;
         private string connect;
         private MySqlConnection conn;
@@ -75,7 +76,7 @@ namespace WindowsFormsApplication2
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Form4 form4 = new Form4();
+            AdminHome form4 = new AdminHome();
             if (Application.OpenForms["Form4"] != null)
             {
                 if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))
@@ -142,7 +143,7 @@ namespace WindowsFormsApplication2
         private void button6_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form5 form5 = new Form5(textBox4.Text);
+            FamilyDetails form5 = new FamilyDetails(textBox4.Text);
             if (Application.OpenForms["Form5"] != null)
             {
                 if ((Application.OpenForms["Form5"].Text).Equals("MSS Information Centre"))
@@ -168,7 +169,7 @@ namespace WindowsFormsApplication2
             }
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void btnResetClick(object sender, EventArgs e)
         {
             textBox1.Text = "";
             textBox2.Text = "";
@@ -183,7 +184,7 @@ namespace WindowsFormsApplication2
         }
 
         int age;
-        public Form3()
+        public BasicInformation()
         {
             InitializeComponent();
             this.textBox1.Text = "";
@@ -363,7 +364,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -373,20 +374,20 @@ namespace WindowsFormsApplication2
                 throw;
             }
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSubmitClick(object sender, EventArgs e)
         {
             try
             {
                 fname = textBox1.Text;
                 mname = textBox2.Text;
                 lname = textBox3.Text;
-                aadharid = textBox4.Text;
-                day = comboBox1.Text;
-                mon = comboBox2.Text;
-                year = comboBox3.Text;
+                aadharid = Convert.ToInt32(textBox4.Text);
+                //day = comboBox1.Text;
+                //mon = comboBox2.Text;
+                //year = comboBox3.Text;
                 bloodgp = comboBox4.Text;
-                bdate = day + "/" + mon + "/" + year;
-                date = DateTime.Now.ToString("yyyy");
+                bdate = dtpBirthDate.Value.Date.ToString("yyyy-MM-dd");//day + "/" + mon + "/" + year;
+                //date = DateTime.Now.ToString("yyyy");
                 if (radioButton1.Checked == true)
                 {
                     gender = radioButton1.Text;
@@ -399,7 +400,8 @@ namespace WindowsFormsApplication2
                 caste = textBox6.Text;
                 if (submitClickCount == 0)
                 {
-                    if (fname == "" || mname == "" || lname == "" || aadharid == "" || day == "" || mon == "" || year == "" || bloodgp == "" || gender == "" || religion == "" || caste == "")
+                    //if (fname == "" || mname == "" || lname == "" || aadharid <= 0 || day == "" || mon == "" || year == "" || bloodgp == "" || gender == "" || religion == "" || caste == "")
+                    if (fname == "" || mname == "" || lname == "" || aadharid <= 0 || bloodgp == "" || gender == "" || religion == "" || caste == "")
                     {
                         MessageBox.Show("Please enter all fields!");
                     }
@@ -410,7 +412,7 @@ namespace WindowsFormsApplication2
                         MySqlCommand cmdQuery = new MySqlCommand();
                         try
                         {
-                            cmdQuery.CommandText = "INSERT INTO person(fname,mname,lname,aadharid,bdate,age,bloodgp,gender,religion,caste)" + "VALUES('" + fname + "','" + mname + "','" + lname + "','" + aadharid + "','" + bdate + "','" + age + "','" + bloodgp + "','" + gender + "','" + religion + "','" + caste + "')";
+                            cmdQuery.CommandText = "INSERT INTO Person(FirstName,MiddleName,LastName,Aadharid,DateOfBirth,BloodGroup,Gender,Religion,Caste)" + "VALUES('" + fname + "','" + mname + "','" + lname + "'," + aadharid + ",'" + bdate + "','" + bloodgp + "','" + gender + "','" + religion + "','" + caste + "')";
                             cmdQuery.Connection = conn;
                             cmdQuery.ExecuteNonQuery();
                             MessageBox.Show("Records saved successfully!");
@@ -421,63 +423,63 @@ namespace WindowsFormsApplication2
                         }
                         submitClickCount = 1;
                         conn.Close();
-                        string foldername = @"C:\Users\Admin\Documents\" + aadharid;
-                        if (Directory.Exists(foldername))
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            System.IO.Directory.CreateDirectory(foldername);
-                        }
-                        int acount = 0, bcount = 0, ccount = 0;
-                        string[] FilenameName;
-                        foreach (string item in openFileDialog1.FileNames)
-                        {
-                            FilenameName = item.Split('\\');
-                            if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
-                            {
-                                MessageBox.Show("File Already Exists!");
-                            }
-                            else
-                            {
-                                File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
-                                acount++;
-                            }
+                        //string foldername = @"C:\Users\Admin\Documents\" + aadharid;
+                        //if (Directory.Exists(foldername))
+                        //{
+                        //    return;
+                        //}
+                        //else
+                        //{
+                        //    System.IO.Directory.CreateDirectory(foldername);
+                        //}
+                        //int acount = 0, bcount = 0, ccount = 0;
+                        //string[] FilenameName;
+                        //foreach (string item in openFileDialog1.FileNames)
+                        //{
+                        //    FilenameName = item.Split('\\');
+                        //    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
+                        //    {
+                        //        MessageBox.Show("File Already Exists!");
+                        //    }
+                        //    else
+                        //    {
+                        //        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
+                        //        acount++;
+                        //    }
 
-                        }
-                        foreach (string item in openFileDialog2.FileNames)
-                        {
-                            FilenameName = item.Split('\\');
-                            if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
-                            {
-                                MessageBox.Show("File Already Exists!");
-                            }
-                            else
-                            {
-                                File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
-                                bcount++;
-                            }
-                        }
-                        foreach (string item in openFileDialog3.FileNames)
-                        {
-                            FilenameName = item.Split('\\');
-                            if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
-                            {
-                                MessageBox.Show("File Already Exists!");
-                            }
-                            else
-                            {
-                                File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
-                                ccount++;
-                            }
-                        }
+                        //}
+                        //foreach (string item in openFileDialog2.FileNames)
+                        //{
+                        //    FilenameName = item.Split('\\');
+                        //    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
+                        //    {
+                        //        MessageBox.Show("File Already Exists!");
+                        //    }
+                        //    else
+                        //    {
+                        //        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
+                        //        bcount++;
+                        //    }
+                        //}
+                        //foreach (string item in openFileDialog3.FileNames)
+                        //{
+                        //    FilenameName = item.Split('\\');
+                        //    if (File.Exists(foldername + "\\" + FilenameName[FilenameName.Length - 1]))
+                        //    {
+                        //        MessageBox.Show("File Already Exists!");
+                        //    }
+                        //    else
+                        //    {
+                        //        File.Copy(item, foldername + "\\" + FilenameName[FilenameName.Length - 1]);
+                        //        ccount++;
+                        //    }
+                        //}
                     }
                 }
             }
             catch (Exception)
             {
-
+                throw;
             }
         }
     }

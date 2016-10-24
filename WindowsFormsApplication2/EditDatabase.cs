@@ -5,13 +5,13 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form14 : Form
+    public partial class EditDatabase : Form
     {
         string tablename,aadharid,attriname,attrivalue;
         private string connect;
         private MySqlConnection conn;
         private MySqlDataAdapter mySqlDataAdapter;
-        public Form14()
+        public EditDatabase()
         {
             InitializeComponent();
             this.comboBox1.DisplayMember = "Text";
@@ -26,7 +26,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }

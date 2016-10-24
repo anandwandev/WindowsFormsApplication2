@@ -3,12 +3,12 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace WindowsFormsApplication2
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         String fname,username, password,dbusername,dbpassword;
         private string connect;
         private MySqlConnection conn;
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
         }
@@ -16,7 +16,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -33,7 +33,7 @@ namespace WindowsFormsApplication2
 
         private void registerlink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Form2 form2 = new Form2();
+            RegisterAdmin form2 = new RegisterAdmin();
             form2.ShowDialog();
             this.Hide();
         }
@@ -48,7 +48,7 @@ namespace WindowsFormsApplication2
             MySqlCommand cmdQuery2 = new MySqlCommand();
             MySqlCommand cmdQuery3 = new MySqlCommand();
        
-            cmdQuery1.CommandText = "select uname from anandwanregistration where uname='"+username+"'";
+            cmdQuery1.CommandText = "select Username from Admin where Username='"+username+"'";
             cmdQuery1.Connection = conn;
             reader1 = cmdQuery1.ExecuteReader();
             while (reader1.Read())
@@ -56,7 +56,7 @@ namespace WindowsFormsApplication2
                 dbusername = reader1.GetString(0);
             }
             reader1.Close();
-            cmdQuery2.CommandText = "select pass from anandwanregistration where uname='"+username+"'";
+            cmdQuery2.CommandText = "select Password from Admin where Username='"+username+"'";
             cmdQuery2.Connection = conn;
             reader2 = cmdQuery2.ExecuteReader();
             while (reader2.Read())
@@ -64,7 +64,7 @@ namespace WindowsFormsApplication2
                 dbpassword = reader2.GetString(0);
             }
             reader2.Close();
-            cmdQuery3.CommandText = "select fname from anandwanregistration where uname='" + username + "'";
+            cmdQuery3.CommandText = "select FirstName from admin where Username='" + username + "'";
             cmdQuery3.Connection = conn;
             reader3 = cmdQuery3.ExecuteReader();
             while (reader3.Read())
@@ -75,7 +75,7 @@ namespace WindowsFormsApplication2
             if (username.Equals(dbusername) && password.Equals(dbpassword))
             {
                 MessageBox.Show("Welcome " + fname +"!");
-                Form4 form4 = new Form4();
+                AdminHome form4 = new AdminHome();
                 form4.ShowDialog();            
             }
             else 

@@ -5,30 +5,29 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    public partial class Form11 : Form
+    public partial class SearchFamilyInfo : Form
     {
         private string connect;
         private MySqlConnection conn;
         private MySqlDataAdapter mySqlDataAdapter;
         String whereclause;
         int countreader = 0;
-        public Form11()
+        public SearchFamilyInfo()
         {
             InitializeComponent();
             this.comboBox1.DisplayMember = "Text";
             this.comboBox1.ValueMember = "Value";
             comboBox1.Items.Add(new { Text = "Aadhar ID", Value = "Aadhar ID" });
-            comboBox1.Items.Add(new { Text = "Disability", Value = "Disability" });
-            comboBox1.Items.Add(new { Text = "Disability (%)", Value = "Disability (%)" });
-            comboBox1.Items.Add(new { Text = "Medical Condition", Value = "Medical Condition" });
-            comboBox1.Items.Add(new { Text = "Other Medical Condition", Value = "Other Medical Condition" });
+            comboBox1.Items.Add(new { Text = "Family Head", Value = "Family Head" });
+            comboBox1.Items.Add(new { Text = "Family ID", Value = "Family ID" });
+            comboBox1.Items.Add(new { Text = "Dependents", Value = "Dependents" });
             comboBox1.Items.Add(new { Text = "All", Value = "All" });
         }
         private void ConnectDB()
         {
             try
             {
-                connect = "Server=rds-mysql-anandwan.ceyfcyxuedom.ap-south-1.rds.amazonaws.com;Port=3306;Database=anandwan;Uid=root;Pwd=anandwan";
+                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -78,20 +77,14 @@ namespace WindowsFormsApplication2
             }
         }
 
-        private void Form11_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             ConnectDB();
-            whereclause = textBox1.Text;
-           
-                if(comboBox1.Text == "Aadhar ID")
+            
+                if (comboBox1.Text == "Aadhar ID")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition' from health where aadharid='" + @whereclause + "' ", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt where oqt.Aadharid=" + @whereclause, conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -101,10 +94,10 @@ namespace WindowsFormsApplication2
                         label2.Text = countreader.ToString();
                     }
                 }
-                else if (comboBox1.Text == "Disability")
+                else if (comboBox1.Text == "Family Head")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition' from health where disabilitytype='"+@whereclause+"'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt where oqt.Aadharid=oqt.FamilyHeadId" , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -114,10 +107,11 @@ namespace WindowsFormsApplication2
                         label2.Text = countreader.ToString();
                     }
                 }
-                else if (comboBox1.Text == "Disability (%)")
+                else if (comboBox1.Text == "Family ID")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition' from health where percent='" + @whereclause + "'", conn);
+                //Family head assumed to be financially independent.
+                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt where oqt.FamilyHeadId=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -127,23 +121,10 @@ namespace WindowsFormsApplication2
                         label2.Text = countreader.ToString();
                     }
                 }
-                else if (comboBox1.Text=="Medical Condition")
+                else if (comboBox1.Text == "Dependents")
                 {
                     whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition' from health where medicalCondition='" + @whereclause + "'", conn);
-                    DataSet ds = new DataSet();
-                    mySqlDataAdapter.Fill(ds);
-                    dataGridView1.DataSource = ds.Tables[0];
-                    if (radioButton1.Checked == true)
-                    {
-                        countreader = ds.Tables[0].Rows.Count;
-                        label2.Text = countreader.ToString();
-                    }
-                }
-                else if (comboBox1.Text=="Other Medical Condition")
-                {
-                    whereclause = textBox1.Text;
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition' from health where otherCondition='" + @whereclause + "'", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt where iqt.IsFinanciallyDependent=" + @whereclause , conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -155,7 +136,7 @@ namespace WindowsFormsApplication2
                 }
                 else if (comboBox1.Text=="All")
                 {
-                    mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition'  from health", conn);
+                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt", conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];
@@ -164,8 +145,13 @@ namespace WindowsFormsApplication2
                         countreader = ds.Tables[0].Rows.Count;
                         label2.Text = countreader.ToString();
                     }
-                }
-           
+                }     
+            
+        }
+
+        private void Form10_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
