@@ -25,29 +25,25 @@ namespace WindowsFormsApplication2
         private void button7_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form13 form13 = new Form13();
-            if (Application.OpenForms["Form13"] != null)
+            AdminHome form4 = new AdminHome();
+            if (Application.OpenForms["Form4"] != null)
             {
-                if ((Application.OpenForms["Form13"].Text).Equals("MSS Information Centre"))
+                if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))
                 {
                     isOpen = true;
                 }
                 if (isOpen == true)
                 {
-                    form13.Focus();
+                    form4.Focus();
                     this.Close();
                 }
                 else
                 {
                     isOpen = true;
-                    form13.ShowDialog();
-                    form13.Focus();
+                    form4.Show();
+                    form4.Focus();
                     //this.Close();
                 }
-            }//this.Close();
-            else
-            {
-                form13.ShowDialog();
             }
         }
 
@@ -77,7 +73,27 @@ namespace WindowsFormsApplication2
                 }
                 else if (comboBox1.Text == "Family Details")
                 {
-                    mySqlDataAdapter = new MySqlDataAdapter("select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?',oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId=oqt.FamilyHeadId AND iqt.AadharId!=iqt.FamilyHeadId AND iqt.IsFinanciallyDependent=1) as 'Number of Dependents',(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId=oqt.FamilyHeadId) as 'Total members' from FamilyDetails oqt", conn);
+                    //TODO: move these values to config
+                    var maleSeniorCitizenAgeLimit = 65;
+                    var femaleSeniorCitizenAgeLimit = 60;
+                    //mySqlDataAdapter = new MySqlDataAdapter("select ,noofchildren as 'children',noofseniormem as 'earning members',noofSC as 'senior citizens',relation as 'relation(to family head)',totalmembers as 'total members' from family where aadharid='" + @aadharid + "'", conn);
+                    string familydetailsquery = @"select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?', oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',
+(Select COUNT(*) FROM FamilyDetails iqfdt Inner Join Person iqpt ON iqfdt.AadharId = iqpt.AadharId where iqfdt.FamilyHeadId = oqt.FamilyHeadId AND(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) < 18) ) as 'No. of Childern in Family',
+(Select COUNT(*) FROM FamilyDetails iqfdt
+Inner Join Person iqpt ON iqfdt.AadharId = iqpt.AadharId
+where iqfdt.FamilyHeadId = oqt.FamilyHeadId
+AND((
+(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) > " + femaleSeniorCitizenAgeLimit + @")
+AND iqpt.Gender = 'female') ||
+(
+(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) > " + maleSeniorCitizenAgeLimit + @")
+ AND iqpt.Gender = 'Male') )) as 'No. of Senior citizens in Family',
+(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId = oqt.FamilyHeadId AND iqt.IsFinanciallyDependent = 0) as 'Number of Earning Members',
+oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',
+(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId = oqt.FamilyHeadId AND iqt.AadharId != iqt.FamilyHeadId AND iqt.IsFinanciallyDependent = 1) as 'Number of Dependents',
+(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId = oqt.FamilyHeadId) as 'Total members'
+FROM FamilyDetails oqt";
+                    mySqlDataAdapter = new MySqlDataAdapter(familydetailsquery, conn);
                     DataSet ds = new DataSet();
                     mySqlDataAdapter.Fill(ds);
                     dataGridView1.DataSource = ds.Tables[0];

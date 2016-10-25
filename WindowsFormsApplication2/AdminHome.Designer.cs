@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminHome));
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.button1 = new System.Windows.Forms.Button();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -52,71 +47,14 @@
             this.editDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.basicInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.familyInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.healthInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.skillInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.BackColor = System.Drawing.Color.Transparent;
-            this.radioButton1.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(89, 137);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(80, 25);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Forms";
-            this.radioButton1.UseVisualStyleBackColor = false;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.BackColor = System.Drawing.Color.Transparent;
-            this.radioButton2.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(631, 137);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(154, 25);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Show Database";
-            this.radioButton2.UseVisualStyleBackColor = false;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.BackColor = System.Drawing.Color.Transparent;
-            this.radioButton3.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton3.Location = new System.Drawing.Point(89, 324);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(141, 25);
-            this.radioButton3.TabIndex = 6;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Edit Database";
-            this.radioButton3.UseVisualStyleBackColor = false;
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.BackColor = System.Drawing.Color.Transparent;
-            this.radioButton4.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton4.Location = new System.Drawing.Point(631, 324);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(142, 25);
-            this.radioButton4.TabIndex = 7;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Show Reports";
-            this.radioButton4.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(325, 233);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 30);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Proceed";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // bindingNavigatorMoveFirstItem
             // 
@@ -191,6 +129,7 @@
             this.formsToolStripMenuItem.Name = "formsToolStripMenuItem";
             this.formsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.formsToolStripMenuItem.Text = "Forms";
+            this.formsToolStripMenuItem.Click += new System.EventHandler(this.formsToolStripMenuItem_Click);
             // 
             // databaseOperationsToolStripMenuItem
             // 
@@ -203,15 +142,25 @@
             // 
             // showDatabaseToolStripMenuItem
             // 
+            this.showDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.basicInfoToolStripMenuItem,
+            this.familyInfoToolStripMenuItem,
+            this.healthInfoToolStripMenuItem,
+            this.skillInfoToolStripMenuItem});
             this.showDatabaseToolStripMenuItem.Name = "showDatabaseToolStripMenuItem";
             this.showDatabaseToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.showDatabaseToolStripMenuItem.Text = "Show Database";
+            this.showDatabaseToolStripMenuItem.Text = "Search Records";
+            this.showDatabaseToolStripMenuItem.Click += new System.EventHandler(this.showDatabaseToolStripMenuItem_Click);
             // 
             // editDatabaseToolStripMenuItem
             // 
+            this.editDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editRecordsToolStripMenuItem,
+            this.deleteRecordsToolStripMenuItem});
             this.editDatabaseToolStripMenuItem.Name = "editDatabaseToolStripMenuItem";
             this.editDatabaseToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.editDatabaseToolStripMenuItem.Text = "Edit Database";
+            this.editDatabaseToolStripMenuItem.Click += new System.EventHandler(this.editDatabaseToolStripMenuItem_Click);
             // 
             // reportsToolStripMenuItem
             // 
@@ -226,6 +175,48 @@
             this.signOutToolStripMenuItem.Text = "Sign out";
             this.signOutToolStripMenuItem.Click += new System.EventHandler(this.signOutToolStripMenuItem_Click);
             // 
+            // basicInfoToolStripMenuItem
+            // 
+            this.basicInfoToolStripMenuItem.Name = "basicInfoToolStripMenuItem";
+            this.basicInfoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.basicInfoToolStripMenuItem.Text = "Basic Info";
+            this.basicInfoToolStripMenuItem.Click += new System.EventHandler(this.basicInfoToolStripMenuItem_Click);
+            // 
+            // familyInfoToolStripMenuItem
+            // 
+            this.familyInfoToolStripMenuItem.Name = "familyInfoToolStripMenuItem";
+            this.familyInfoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.familyInfoToolStripMenuItem.Text = "Family Info";
+            this.familyInfoToolStripMenuItem.Click += new System.EventHandler(this.familyInfoToolStripMenuItem_Click);
+            // 
+            // healthInfoToolStripMenuItem
+            // 
+            this.healthInfoToolStripMenuItem.Name = "healthInfoToolStripMenuItem";
+            this.healthInfoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.healthInfoToolStripMenuItem.Text = "Health Info";
+            this.healthInfoToolStripMenuItem.Click += new System.EventHandler(this.healthInfoToolStripMenuItem_Click);
+            // 
+            // skillInfoToolStripMenuItem
+            // 
+            this.skillInfoToolStripMenuItem.Name = "skillInfoToolStripMenuItem";
+            this.skillInfoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.skillInfoToolStripMenuItem.Text = "Skill Info";
+            this.skillInfoToolStripMenuItem.Click += new System.EventHandler(this.skillInfoToolStripMenuItem_Click);
+            // 
+            // editRecordsToolStripMenuItem
+            // 
+            this.editRecordsToolStripMenuItem.Name = "editRecordsToolStripMenuItem";
+            this.editRecordsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editRecordsToolStripMenuItem.Text = "Edit Records";
+            this.editRecordsToolStripMenuItem.Click += new System.EventHandler(this.editRecordsToolStripMenuItem_Click);
+            // 
+            // deleteRecordsToolStripMenuItem
+            // 
+            this.deleteRecordsToolStripMenuItem.Name = "deleteRecordsToolStripMenuItem";
+            this.deleteRecordsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteRecordsToolStripMenuItem.Text = "Delete Records";
+            this.deleteRecordsToolStripMenuItem.Click += new System.EventHandler(this.deleteRecordsToolStripMenuItem_Click);
+            // 
             // AdminHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -234,16 +225,13 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(884, 511);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.radioButton4);
-            this.Controls.Add(this.radioButton3);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.menuStrip1);
+            this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AdminHome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MSS Information Centre";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -252,12 +240,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripButton bindingNavigatorAddNewItem;
         private System.Windows.Forms.ToolStripLabel bindingNavigatorCountItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorDeleteItem;
@@ -276,5 +258,11 @@
         private System.Windows.Forms.ToolStripMenuItem editDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem signOutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem basicInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem familyInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem healthInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem skillInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editRecordsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteRecordsToolStripMenuItem;
     }
 }

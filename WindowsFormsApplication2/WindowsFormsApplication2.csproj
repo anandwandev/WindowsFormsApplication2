@@ -84,12 +84,6 @@
     <Compile Include="SearchSkillInfo.Designer.cs">
       <DependentUpon>SearchSkillInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form13.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form13.Designer.cs">
-      <DependentUpon>Form13.cs</DependentUpon>
-    </Compile>
     <Compile Include="EditDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,12 +132,6 @@
     <Compile Include="EducationalDetails.Designer.cs">
       <DependentUpon>EducationalDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form8.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form8.Designer.cs">
-      <DependentUpon>Form8.cs</DependentUpon>
-    </Compile>
     <Compile Include="SearchBasicInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,9 +151,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SearchSkillInfo.resx">
       <DependentUpon>SearchSkillInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form13.resx">
-      <DependentUpon>Form13.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditDatabase.resx">
       <DependentUpon>EditDatabase.cs</DependentUpon>
@@ -193,9 +178,6 @@
     <EmbeddedResource Include="EducationalDetails.resx">
       <DependentUpon>EducationalDetails.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form8.resx">
-      <DependentUpon>Form8.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchBasicInfo.resx">
       <DependentUpon>SearchBasicInfo.cs</DependentUpon>

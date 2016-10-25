@@ -40,9 +40,10 @@ namespace WindowsFormsApplication2
         private void button1_Click(object sender, EventArgs e)
         {
             ConnectDB();
+            @aadharid = textBox1.Text;
             if (comboBox1.Text == "Basic Details")
             {
-                mySqlDataAdapter = new MySqlDataAdapter("select fname as 'first name',mname as 'middle name',lname as 'surname',aadharid as 'aadharID',bdate as 'date of birth',age as 'age',bloodgp as 'blood group',gender as 'gender',religion as 'religion',caste as 'caste' from person where aadharid='" + @aadharid + "'", conn);
+                mySqlDataAdapter = new MySqlDataAdapter("select FirstName as 'First name',MiddleName as 'Middle name',LastName as 'Surname',Aadharid as 'Aadhar ID',DateOfBirth as 'Date of birth',ROUND(DATEDIFF(DateOfBirth,CURDATE())/365) as 'Age (in years)',BloodGroup as 'Blood group',Gender as 'Gender',Religion as 'Religion',Caste as 'Caste' from Person where Aadharid=" + @aadharid , conn);
                 DataSet ds = new DataSet();
                 mySqlDataAdapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
@@ -50,15 +51,35 @@ namespace WindowsFormsApplication2
             }
             else if (comboBox1.Text == "Family Details")
             {
-                mySqlDataAdapter = new MySqlDataAdapter("select isHead as 'Family Head',aadharid as 'aadhar ID',aadharidFamily as '(Family) aadhar ID',noofchildren as 'children',noofseniormem as 'earning members',noofSC as 'senior citizens',relation as 'relation(to family head)',totalmembers as 'total members' from family where aadharid='" + @aadharid + "'", conn);
+                //TODO: move these values to config
+                var maleSeniorCitizenAgeLimit = 65;
+                var femaleSeniorCitizenAgeLimit = 60;
+                //mySqlDataAdapter = new MySqlDataAdapter("select ,noofchildren as 'children',noofseniormem as 'earning members',noofSC as 'senior citizens',relation as 'relation(to family head)',totalmembers as 'total members' from family where aadharid='" + @aadharid + "'", conn);
+                string familydetailsquery = @"select (oqt.AadharId=oqt.FamilyHeadId) as 'Is a Family Head?', oqt.AadharId as 'Aadhar ID',oqt.FamilyHeadId as '(Family Head) Aadhar ID',
+(Select COUNT(*) FROM FamilyDetails iqfdt Inner Join Person iqpt ON iqfdt.AadharId = iqpt.AadharId where iqfdt.FamilyHeadId = oqt.FamilyHeadId AND(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) < 18) ) as 'No. of Childern in Family',
+(Select COUNT(*) FROM FamilyDetails iqfdt
+Inner Join Person iqpt ON iqfdt.AadharId = iqpt.AadharId
+where iqfdt.FamilyHeadId = oqt.FamilyHeadId
+AND((
+(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) > " + femaleSeniorCitizenAgeLimit + @")
+AND iqpt.Gender = 'female') ||
+(
+(ROUND(DATEDIFF(iqpt.DateOfBirth, CURDATE()) / 365) > " + maleSeniorCitizenAgeLimit + @")
+ AND iqpt.Gender = 'Male') )) as 'No. of Senior citizens in Family',
+(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId = oqt.FamilyHeadId AND iqt.IsFinanciallyDependent = 0) as 'Number of Earning Members',
+oqt.IsFinanciallyDependent as 'Is a financially dependent?',oqt.RelationToFamilyHead as 'Relation to family head',
+(SELECT COUNT(*) FROM FamilyDetails iqt where iqt.FamilyHeadId = oqt.FamilyHeadId AND iqt.AadharId != iqt.FamilyHeadId AND iqt.IsFinanciallyDependent = 1) as 'Number of Dependents',
+(SELECT COUNT(*) FROM FamilyDetails iqt2 where iqt2.FamilyHeadId = oqt.FamilyHeadId) as 'Total members'
+FROM FamilyDetails oqt where oqt.Aadharid=" + @aadharid;
+                                mySqlDataAdapter = new MySqlDataAdapter(familydetailsquery, conn);
                 DataSet ds = new DataSet();
                 mySqlDataAdapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
                 conn.Close();
             }
-            else if (comboBox1.Text == "Health Details")
+            else if (comboBox1.Text == "Healthcare Details")
             {
-                mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',disabilitytype as 'type of disability',percent as 'disability (%)',medicalCondition as 'medical condition',otherCondition as 'other medical condition'  from health where aadharid='" + @aadharid + "'", conn);
+                mySqlDataAdapter = new MySqlDataAdapter("select AadharId as 'Aadhar ID',OtherDisabilityType as 'Type of disability', DisabilityPercentage as 'Disability (%)',MedicalConditions as 'Medical conditions' from PersonHealthDetails where AadharId=" + @aadharid , conn);
                 DataSet ds = new DataSet();
                 mySqlDataAdapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
@@ -66,7 +87,7 @@ namespace WindowsFormsApplication2
             }
             else if (comboBox1.Text == "Skill Details")
             {
-                mySqlDataAdapter = new MySqlDataAdapter("select aadharid as 'aadhar ID',degree as 'education',qualification as 'extra courses',workexp as 'work experience',department as 'working department',typeofwork as 'type of work',salary as 'salary' from qualifications where aadharid='" + @aadharid + "'", conn);
+                mySqlDataAdapter = new MySqlDataAdapter("select Aadharid as 'Aadhar ID',HighestQualification as 'Highest Qualification',ProfessionalCourses as 'Extra courses',MSSWorkExperience as 'MSS Work Experience (in months)',Department as 'Working Department',TypeOfWork as 'Type of work',Salary as 'Salary' from Qualification where Aadharid=" + @aadharid , conn);
                 DataSet ds = new DataSet();
                 mySqlDataAdapter.Fill(ds);
                 dataGridView1.DataSource = ds.Tables[0];
@@ -77,29 +98,25 @@ namespace WindowsFormsApplication2
         private void button7_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form13 form13 = new Form13();
-            if (Application.OpenForms["Form13"] != null)
+            AdminHome form4 = new AdminHome();
+            if (Application.OpenForms["Form4"] != null)
             {
-                if ((Application.OpenForms["Form13"].Text).Equals("MSS Information Centre"))
+                if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))
                 {
                     isOpen = true;
                 }
                 if (isOpen == true)
                 {
-                    form13.Focus();
+                    form4.Focus();
                     this.Close();
                 }
                 else
                 {
                     isOpen = true;
-                    form13.ShowDialog();
-                    form13.Focus();
+                    form4.Show();
+                    form4.Focus();
                     //this.Close();
                 }
-            }//this.Close();
-            else
-            {
-                form13.ShowDialog();
             }
         }
 
@@ -109,45 +126,38 @@ namespace WindowsFormsApplication2
             this.comboBox2.ValueMember = "Value";
             if (comboBox1.Text == "Basic Details")
             {
-                comboBox2.Items.Add(new { Text = "First Name", Value = "fname" });
-                comboBox2.Items.Add(new { Text = "Middle Name", Value = "mname" });
-                comboBox2.Items.Add(new { Text = "Surname", Value = "lname" });
-                comboBox2.Items.Add(new { Text = "Aadharid", Value = "aadharid" });
-                comboBox2.Items.Add(new { Text = "Birth Date", Value = "bdate" });
-                comboBox2.Items.Add(new { Text = "Age", Value = "age" });
-                comboBox2.Items.Add(new { Text = "Blood Group", Value = "bloodgp" });
-                comboBox2.Items.Add(new { Text = "Gender", Value = "gender" });
-                comboBox2.Items.Add(new { Text = "Religion", Value = "religion" });
-                comboBox2.Items.Add(new { Text = "Caste", Value = "caste" });
+                comboBox2.Items.Add(new { Text = "First Name", Value = "FirstName" });
+                comboBox2.Items.Add(new { Text = "Middle Name", Value = "MiddleName" });
+                comboBox2.Items.Add(new { Text = "Surname", Value = "LastName" });
+                comboBox2.Items.Add(new { Text = "Aadharid", Value = "AadharId" });
+                comboBox2.Items.Add(new { Text = "Birth Date", Value = "DateOfBirth" });
+                comboBox2.Items.Add(new { Text = "Blood Group", Value = "BloodGroup" });
+                comboBox2.Items.Add(new { Text = "Gender", Value = "Gender" });
+                comboBox2.Items.Add(new { Text = "Religion", Value = "Religion" });
+                comboBox2.Items.Add(new { Text = "Caste", Value = "Caste" });
             }
             else if (comboBox1.Text == "Family Details")
             {
-                comboBox2.Items.Add(new { Text = "Family Head (Yes/No)", Value = "isHead" });
-                comboBox2.Items.Add(new { Text = "Family ID", Value = "aadharidFamily" });
-                comboBox2.Items.Add(new { Text = "Aadharid", Value = "aadharid" });
-                comboBox2.Items.Add(new { Text = "Children", Value = "noofchildren" });
-                comboBox2.Items.Add(new { Text = "Senior Citizens", Value = "noofSC" });
-                comboBox2.Items.Add(new { Text = "Earning Members", Value = "noofseniormem" });
-                comboBox2.Items.Add(new { Text = "Total Members", Value = "totalmembers" });
-                comboBox2.Items.Add(new { Text = "Relation", Value = "relation" });
+                comboBox2.Items.Add(new { Text = "Family ID", Value = "FamilyHeadId" });
+                comboBox2.Items.Add(new { Text = "Aadharid", Value = "AadharId" });
+                comboBox2.Items.Add(new { Text = "Relation", Value = "RelationToFamilyHead" });
             }
             else if (comboBox1.Text == "Healthcare Details")
             {
-                comboBox2.Items.Add(new { Text = "Aadharid", Value = "aadharid" });
-                comboBox1.Items.Add(new { Text = "Disability", Value = "disabilitytype" });
-                comboBox1.Items.Add(new { Text = "Disability (%)", Value = "percent" });
-                comboBox1.Items.Add(new { Text = "Medical Condition", Value = "medicalCondition" });
-                comboBox1.Items.Add(new { Text = "Other Medical Condition", Value = "otherCondition" });
+                comboBox2.Items.Add(new { Text = "Aadharid", Value = "AadharId" });
+                comboBox1.Items.Add(new { Text = "Disability", Value = "OtherDisabilityType" });
+                comboBox1.Items.Add(new { Text = "Disability (%)", Value = "DisabilityPercentage" });
+                comboBox1.Items.Add(new { Text = "Medical Condition", Value = "MedicalConditions" });
             }
             else if (comboBox1.Text == "Skill Details")
             {
-                comboBox2.Items.Add(new { Text = "Aadharid", Value = "aadharid" });
-                comboBox2.Items.Add(new { Text = "Educational Degree", Value = "degree" });
-                comboBox2.Items.Add(new { Text = "Other Qualification", Value = "qualification" });
-                comboBox2.Items.Add(new { Text = "Work Experience", Value = "workexp" });
-                comboBox2.Items.Add(new { Text = "Department", Value = "department" });
-                comboBox2.Items.Add(new { Text = "Work Type", Value = "typeofwork" });
-                comboBox2.Items.Add(new { Text = "Salary", Value = "salary" });
+                comboBox2.Items.Add(new { Text = "Aadharid", Value = "AadharId" });
+                comboBox2.Items.Add(new { Text = "Educational Degree", Value = "HighestQualification" });
+                comboBox2.Items.Add(new { Text = "Other Qualification", Value = "ProfessionalCourses" });
+                comboBox2.Items.Add(new { Text = "Work Experience", Value = "MSSWorkExperience" });
+                comboBox2.Items.Add(new { Text = "Department", Value = "Department" });
+                comboBox2.Items.Add(new { Text = "Work Type", Value = "TypeOfWork" });
+                comboBox2.Items.Add(new { Text = "Salary", Value = "Salary" });
             }
         }
 
@@ -170,129 +180,101 @@ namespace WindowsFormsApplication2
             attrivalue = textBox2.Text;
             if (comboBox1.Text == "Basic Details")
             {
-                tablename = "person";
+                tablename = "Person";
             }
             else if (comboBox1.Text == "Family Details")
             {
-                tablename = "family";
+                tablename = "FamilyDetails";
             }
             else if (comboBox1.Text == "Healthcare Details")
             {
-                tablename = "health";
+                tablename = "PersonHealthDetails";
             }
             else if (comboBox1.Text == "Skill Details")
             {
-                tablename = "qualifications";
+                tablename = "Qualification";
             }
             if (comboBox2.Text == "First Name")
             {
-                attriname = "fname";
+                attriname = "FirstName";
             }
             if (comboBox2.Text == "Middle Name")
             {
-                attriname = "mname";
+                attriname = "MiddleName";
             }
             if (comboBox2.Text == "Surname")
             {
-                attriname = "lname";
+                attriname = "LastName";
             }
             if (comboBox2.Text == "Aadharid")
             {
-                attriname = "aadharid";
+                attriname = "AadharId";
             }
             if (comboBox2.Text == "Birth Date")
             {
-                attriname = "bdate";
-            }
-            if (comboBox2.Text == "Age")
-            {
-                attriname = "age";
+                attriname = "DateOfBirth";
             }
             if (comboBox2.Text == "Blood Group")
             {
-                attriname = "bloodgp";
+                attriname = "BloodGroup";
             }
             if (comboBox2.Text == "Gender")
             {
-                attriname = "gender";
+                attriname = "Gender";
             }
             if (comboBox2.Text == "Religion")
             {
-                attriname = "religion";
+                attriname = "Religion";
             }
             if (comboBox2.Text == "Caste")
             {
-                attriname = "caste";
+                attriname = "Caste";
             }
-            if (comboBox2.Text == "Family Head (Yes/No)")
+            if (comboBox2.Text == "Family Head ID")
             {
-                attriname = "isHead";
-            }
-            if (comboBox2.Text == "Family ID")
-            {
-                attriname = "aadharidFamily";
-            }
-            if (comboBox2.Text == "Children")
-            {
-                attriname = "noofchildren";
-            }
-            if (comboBox2.Text == "Senior Citizens")
-            {
-                attriname = "noofSC";
-            }
-            if (comboBox2.Text == "Earning Members")
-            {
-                attriname = "noofseniormem";
-            }
-            if (comboBox2.Text == "Total Members")
-            {
-                attriname = "totalmembers";
+                attriname = "FamilyHeadId";
             }
             if (comboBox2.Text == "Relation")
             {
-                attriname = "relation";
+                attriname = "RelationToFamilyHead";
             }
             if (comboBox2.Text == "Disability")
             {
-                attriname = "disabilitytype";
+                attriname = "OtherDisabilityType";
             }
             if (comboBox2.Text == "Disability (%)")
             {
-                attriname = "percent";
+                attriname = "DisabilityPercentage";
             }
             if (comboBox2.Text == "Medical Condition")
             {
-                attriname = "medicalCondition";
-            }
-            if (comboBox2.Text == "Other Medical Condition")
-            {
-                attriname = "otherCondition";
+                attriname = "MedicalConditions";
             }
             if (comboBox2.Text == "Educational Degree")
             {
-                attriname = "degree";
+                attriname = "HighestQualification";
             }
             if (comboBox2.Text == "Other Qualification")
             {
-                attriname = "qualification";
+                attriname = "ProfessionalCourses";
             }
             if (comboBox2.Text == "Work Experience")
             {
-                attriname = "workexp";
+                attriname = "MSSWorkExperience";
             }
             if (comboBox2.Text == "Department")
             {
-                attriname = "department";
+                attriname = "Department";
             }
             if (comboBox2.Text == "Work Type")
             {
-                attriname = "typepfwork";
+                attriname = "TypeOfWork";
             }
             if (comboBox2.Text == "Salary")
             {
-                attriname = "salary";
+                attriname = "Salary";
             }
-            cmdQuery.CommandText = "UPDATE "+tablename+" SET "+attriname+"='"+attrivalue+"' WHERE aadharid='"+aadharid+"'";
+            cmdQuery.CommandText = "UPDATE "+tablename+" SET "+attriname+"='"+attrivalue+"' WHERE AadharId="+aadharid;
             cmdQuery.Connection = conn;
             cmdQuery.ExecuteNonQuery();
             MessageBox.Show("Record Edited Successfully");

@@ -43,29 +43,25 @@ namespace WindowsFormsApplication2
         private void button7_Click(object sender, EventArgs e)
         {
             bool isOpen = false;
-            Form8 form8 = new Form8();
-            if (Application.OpenForms["Form8"] != null)
+            AdminHome form4 = new AdminHome();
+            if (Application.OpenForms["Form4"] != null)
             {
-                if ((Application.OpenForms["Form8"].Text).Equals("MSS Information Centre"))
+                if ((Application.OpenForms["Form4"].Text).Equals("MSS Information Centre"))
                 {
                     isOpen = true;
                 }
                 if (isOpen == true)
                 {
-                    form8.Focus();
+                    form4.Focus();
                     this.Close();
                 }
                 else
                 {
                     isOpen = true;
-                    form8.ShowDialog();
-                    form8.Focus();
+                    form4.Show();
+                    form4.Focus();
                     //this.Close();
                 }
-            }//this.Close();
-            else
-            {
-                form8.ShowDialog();
             }
         }
 
