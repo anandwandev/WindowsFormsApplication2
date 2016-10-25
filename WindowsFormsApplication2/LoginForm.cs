@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 namespace WindowsFormsApplication2
@@ -16,7 +17,7 @@ namespace WindowsFormsApplication2
         {
             try
             {
-                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
+                connect = ConfigurationManager.AppSettings.Get("MySQLDBConnectionString");
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }

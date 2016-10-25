@@ -126,7 +126,7 @@ FROM FamilyDetails oqt";
         {
             try
             {
-                connect = "Server=localhost;Port=3306;Database=anandwantest;Uid=root;Pwd=root123";
+                connect = ConfigurationManager.AppSettings.Get("MySQLDBConnectionString");
                 conn = new MySqlConnection(connect);
                 conn.Open();
             }
@@ -146,16 +146,16 @@ FROM FamilyDetails oqt";
                 MySqlCommand cmdQuery3 = new MySqlCommand();
                 MySqlCommand cmdQuery4 = new MySqlCommand();
                 aadharid = textBox1.Text;
-                cmdQuery1.CommandText = "DELETE FROM Qualification WHERE Aadharid='" + aadharid + "'";
+                cmdQuery1.CommandText = "DELETE FROM Qualification WHERE Aadharid=" + aadharid;
                 cmdQuery1.Connection = conn;
                 cmdQuery1.ExecuteNonQuery();
-                cmdQuery2.CommandText = "DELETE FROM PersonHealthDetails WHERE Aadharid='" + aadharid + "'";
+                cmdQuery2.CommandText = "DELETE FROM PersonHealthDetails WHERE Aadharid=" + aadharid;
                 cmdQuery2.Connection = conn;
                 cmdQuery2.ExecuteNonQuery();
-                cmdQuery3.CommandText = "DELETE FROM FamilyDetails WHERE Aadharid='" + aadharid + "'";
+                cmdQuery3.CommandText = "DELETE FROM FamilyDetails WHERE Aadharid=" + aadharid;
                 cmdQuery3.Connection = conn;
                 cmdQuery3.ExecuteNonQuery();
-                cmdQuery4.CommandText = "DELETE FROM Person WHERE Aadharid='" + aadharid + "'";
+                cmdQuery4.CommandText = "DELETE FROM Person WHERE Aadharid=" + aadharid;
                 cmdQuery4.Connection = conn;
                 cmdQuery4.ExecuteNonQuery();
                 MessageBox.Show("Record Deleted Successfully !!!");
